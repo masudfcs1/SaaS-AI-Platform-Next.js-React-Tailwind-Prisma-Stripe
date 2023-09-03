@@ -1,16 +1,16 @@
 import Navbar from "@/components/navbar";
+import { UserButton } from "@clerk/nextjs";
 import React from "react";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className=" h-full relative">
-      <div className=" hidden h-full md:flex flex-col md:w-72 md:fixed md:inset-y-0 bg-gray-800 ">
-        <div>Hello Sidebar</div>
-        <div>
-          <Navbar />
-        </div>
+      <div className=" hidden h-full md:flex flex-col md:w-72 md:fixed md:inset-y-0 z-[80] bg-gray-800 ">
+        <div className=" text-white p-6">Hello Sidebar</div>
       </div>
-      <main className=" md:pl-72">Center Sidebar {children}</main>{" "}
+      <main className="md:pl-72">
+        <Navbar /> {children}
+      </main>
     </div>
   );
 };
