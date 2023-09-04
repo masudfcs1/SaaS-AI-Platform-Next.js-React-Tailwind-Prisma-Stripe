@@ -6,11 +6,10 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+
+
+![image](https://github.com/masudfcs1/SaaS-AI-Platform-Next.js-React-Tailwind-Prisma-Stripe/assets/57311382/fd2f4ef8-ab64-42c7-874d-fdece1a496a1)
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -33,3 +32,4 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # SaaS-AI-Platform-Next.js-React-Tailwind-Prisma-Stripe
+```
