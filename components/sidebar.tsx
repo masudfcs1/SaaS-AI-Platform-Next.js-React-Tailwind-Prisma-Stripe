@@ -3,9 +3,12 @@ import Link from "next/link";
 import React from "react";
 import imglogo from "../public/logo.png";
 import {
+  Code,
   ImageIcon,
   LayoutDashboard,
   MessageSquare,
+  Music,
+  Settings,
   VideoIcon,
 } from "lucide-react";
 import { Montserrat } from "next/font/google";
@@ -23,20 +26,37 @@ const routes = [
   {
     label: "Conversation",
     icon: MessageSquare,
-    href: "/dashboard",
+    href: "/conversation",
     color: " text-violet-600",
   },
   {
     label: "Image Generation",
     icon: ImageIcon,
-    href: "/dashboard",
+    href: "/image",
     color: " text-pink-600",
   },
   {
     label: "Video Generation",
     icon: VideoIcon,
-    href: "/dashboard",
+    href: "/video",
     color: " text-orange-600",
+  },
+  {
+    label: "Music Generation",
+    icon: Music,
+    href: "/music",
+    color: " text-blue-600",
+  },
+  {
+    label: "Code Generation",
+    icon: Code,
+    href: "/code",
+    color: " text-green-600",
+  },
+  {
+    label: "Setting",
+    icon: Settings,
+    href: "/settings",
   },
 ];
 
