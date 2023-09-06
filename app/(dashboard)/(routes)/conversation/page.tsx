@@ -1,3 +1,4 @@
+"use client";
 import Heading from "@/components/heading";
 import { MessageSquare } from "lucide-react";
 import React from "react";
