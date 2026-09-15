@@ -13,8 +13,8 @@ const MobileSidebar = () => {
   }, []);
 
   if (!isClient) {
-    return "This is never prerendered";
-  } else "Prerendered";
+    return null;
+  }
 
   return (
     <Sheet>

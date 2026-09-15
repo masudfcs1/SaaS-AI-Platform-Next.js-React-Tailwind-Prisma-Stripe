@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Heading from "@/components/heading";
 import { useForm } from "react-hook-form";
-import { MessageSquare } from "lucide-react";
+import { Code } from "lucide-react";
 import React, { useState } from "react";
 import { formSchema } from "./constants";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ interface ChatMessage {
   content: string;
 }
 
-const ConversationPage = () => {
+const CodePage = () => {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
@@ -40,7 +40,7 @@ const ConversationPage = () => {
       };
       const newMessages = [...messages, userMessage];
 
-      const response = await axios.post("/api/conversation", {
+      const response = await axios.post("/api/code", {
         messages: newMessages,
       });
 
@@ -56,11 +56,11 @@ const ConversationPage = () => {
   return (
     <div>
       <Heading
-        title="Conversation"
-        description="Our most advanced conversation model."
-        icon={MessageSquare}
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        title="Code Generation"
+        description="Generate code using descriptive text."
+        icon={Code}
+        iconColor="text-green-500"
+        bgColor="bg-green-500/10"
       />
 
       <div className="px-4 lg:px-8">
@@ -78,7 +78,7 @@ const ConversationPage = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent bg-transparent dark:text-white"
                         disabled={isLoading}
-                        placeholder="How do I calculate the radius of a circle?"
+                        placeholder="Simple toggle button using React hooks."
                         {...field}
                       />
                     </FormControl>
@@ -99,14 +99,14 @@ const ConversationPage = () => {
         <div className="space-y-4 mt-4">
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-zinc-100 dark:bg-white/[0.04]">
-              <div className="h-6 w-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+              <div className="h-6 w-6 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           {messages.length === 0 && !isLoading && (
             <div className="text-center py-20">
-              <MessageSquare className="mx-auto h-10 w-10 text-zinc-400 dark:text-zinc-600 mb-4" />
+              <Code className="mx-auto h-10 w-10 text-zinc-400 dark:text-zinc-600 mb-4" />
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                No conversation started yet.
+                No code generated yet.
               </p>
             </div>
           )}
@@ -126,16 +126,18 @@ const ConversationPage = () => {
                     "flex items-center justify-center h-8 w-8 rounded-md flex-shrink-0",
                     message.role === "user"
                       ? "bg-purple-500/10"
-                      : "bg-emerald-500/10"
+                      : "bg-green-500/10"
                   )}
                 >
-                  <span className="text-xs font-bold">
+                  <span className="text-xs font-bold text-zinc-900 dark:text-white">
                     {message.role === "user" ? "U" : "AI"}
                   </span>
                 </div>
-                <p className="text-sm leading-7 text-zinc-900 dark:text-white whitespace-pre-wrap">
-                  {message.content}
-                </p>
+                <div className="text-sm leading-7 text-zinc-900 dark:text-white overflow-hidden w-full">
+                  <pre className="whitespace-pre-wrap font-mono text-xs bg-zinc-900 dark:bg-black/40 text-green-400 p-4 rounded-lg overflow-x-auto">
+                    {message.content}
+                  </pre>
+                </div>
               </div>
             ))}
           </div>
@@ -145,4 +147,4 @@ const ConversationPage = () => {
   );
 };
 
-export default ConversationPage;
+export default CodePage;
