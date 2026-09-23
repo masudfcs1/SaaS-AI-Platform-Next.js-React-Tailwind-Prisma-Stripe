@@ -20,20 +20,24 @@ export const LandingHero = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (subIndex === phrases[index].length + 1 && !isDeleting) {
-      const timeout = setTimeout(() => setIsDeleting(true), 1500);
-      return () => clearTimeout(timeout);
-    }
-
-    if (subIndex === 0 && isDeleting) {
-      setIsDeleting(false);
-      setIndex((prev) => (prev + 1) % phrases.length);
-      return;
-    }
+    const isPhraseComplete = subIndex === phrases[index].length + 1 && !isDeleting;
+    const isPhraseDeleted = subIndex === 0 && isDeleting;
+    const delay = isPhraseComplete ? 1500 : isPhraseDeleted ? 0 : isDeleting ? 40 : 80;
 
     const timeout = setTimeout(() => {
+      if (isPhraseComplete) {
+        setIsDeleting(true);
+        return;
+      }
+
+      if (isPhraseDeleted) {
+        setIsDeleting(false);
+        setIndex((prev) => (prev + 1) % phrases.length);
+        return;
+      }
+
       setSubIndex((prev) => prev + (isDeleting ? -1 : 1));
-    }, isDeleting ? 40 : 80);
+    }, delay);
 
     return () => clearTimeout(timeout);
   }, [subIndex, index, isDeleting]);

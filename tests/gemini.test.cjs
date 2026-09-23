@@ -12,10 +12,10 @@ function loadModule(file, { env = {}, fetch, dependencies = {} } = {}) {
   const compiled = ts.transpileModule(fs.readFileSync(filename, "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
   }).outputText;
-  const module = { exports: {} };
+  const compiledModule = { exports: {} };
   vm.runInNewContext(compiled, {
-    module,
-    exports: module.exports,
+    module: compiledModule,
+    exports: compiledModule.exports,
     require: (name) => name === "server-only" ? {} : dependencies[name] ?? require(name),
     process: { env },
     fetch: fetch ?? (() => { throw new Error("Unexpected network request"); }),
@@ -24,7 +24,7 @@ function loadModule(file, { env = {}, fetch, dependencies = {} } = {}) {
     setTimeout,
     clearTimeout,
   }, { filename });
-  return module.exports;
+  return compiledModule.exports;
 }
 
 const messages = [{ role: "user", content: "Hello" }];

@@ -1,11 +1,19 @@
 
 
-Configure the environment using `.env.example`, then run the development server:
+This project uses Next.js 16.3.6 and React 19.3.0. Use Node.js 24 LTS
+(`.nvmrc` pins 24.21.0); Node.js 22.13 or newer in the 22.x line is also supported.
+The landing page, dashboard, and AI tools are public; no authentication service is required.
+
+Install dependencies with `npm ci`, configure the environment using `.env.example`,
+then run the development server:
 
 ```bash
 npm run dev
 
 ```
+
+Use `npm run build` and `npm start` for production. Run `npm run lint`,
+`npm run typecheck`, and `npm test` to validate changes.
 
 ## Reusable Gemini utility
 
@@ -53,7 +61,7 @@ underlying request format. Run `npm test` for the utility and route regression t
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can edit the landing page in `app/(landing)/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
