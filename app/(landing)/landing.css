@@ -1,0 +1,62 @@
+.landing-page {
+  --background: 43 33% 96%;
+  --foreground: 28 16% 14%;
+  --card: 42 50% 99%;
+  --card-foreground: 28 16% 14%;
+  --popover: 42 50% 99%;
+  --popover-foreground: 28 16% 14%;
+  --primary: 16 70% 39%;
+  --primary-foreground: 42 50% 99%;
+  --secondary: 38 25% 91%;
+  --secondary-foreground: 28 16% 20%;
+  --muted: 38 25% 92%;
+  --muted-foreground: 28 9% 42%;
+  --accent: 25 53% 91%;
+  --accent-foreground: 16 65% 32%;
+  --border: 35 19% 83%;
+  --input: 35 17% 77%;
+  --ring: 16 70% 39%;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.dark .landing-page {
+  --background: 27 15% 9%;
+  --foreground: 40 27% 92%;
+  --card: 28 13% 12%;
+  --card-foreground: 40 27% 92%;
+  --popover: 28 13% 12%;
+  --popover-foreground: 40 27% 92%;
+  --primary: 23 82% 69%;
+  --primary-foreground: 22 39% 12%;
+  --secondary: 28 13% 18%;
+  --secondary-foreground: 40 27% 92%;
+  --muted: 28 13% 15%;
+  --muted-foreground: 33 14% 67%;
+  --accent: 24 28% 19%;
+  --accent-foreground: 27 85% 79%;
+  --border: 30 12% 26%;
+  --input: 30 12% 33%;
+  --ring: 23 82% 69%;
+}
+
+.landing-container { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: 1.25rem; }
+.landing-serif { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; letter-spacing: -0.065em; }
+.landing-eyebrow { font-size: 10px; line-height: 1.6; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.landing-nav-link { position: relative; padding-block: 0.5rem; border-radius: 2px; transition: color 160ms ease; }
+.landing-nav-link:hover { color: hsl(var(--foreground)); }
+.landing-nav-link:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 5px; }
+.landing-page section[id] { scroll-margin-top: 7rem; }
+.landing-page ::selection { background: hsl(var(--primary) / 0.2); color: hsl(var(--foreground)); }
+.landing-art { box-shadow: 0 25px 60px -40px hsl(var(--foreground) / 0.3); }
+
+@media (min-width: 640px) {
+  .landing-container { padding-inline: 2rem; }
+  .landing-eyebrow { font-size: 11px; }
+}
+@media (min-width: 1024px) {
+  .landing-container { padding-inline: 3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-page *, .landing-page *::before, .landing-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

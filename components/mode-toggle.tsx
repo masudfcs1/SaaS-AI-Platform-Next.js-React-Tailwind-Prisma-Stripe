@@ -5,6 +5,7 @@ import { ChevronDown, Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +23,7 @@ const themeOptions = [
   { value: "system", label: "System", icon: Monitor },
 ];
 
-export function ModeToggle({ showLabel = false }: { showLabel?: boolean }) {
+export function ModeToggle({ showLabel = false, contentClassName }: { showLabel?: boolean; contentClassName?: string }) {
   const { theme, setTheme } = useTheme();
   const mounted = React.useSyncExternalStore(subscribe, () => true, () => false);
   const selected = themeOptions.find((option) => option.value === theme);
@@ -50,7 +51,7 @@ export function ModeToggle({ showLabel = false }: { showLabel?: boolean }) {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" sideOffset={8} className="w-44 rounded-xl p-1.5">
+      <DropdownMenuContent align="end" sideOffset={8} className={cn("w-44 rounded-xl p-1.5", contentClassName)}>
         <DropdownMenuLabel className="text-xs text-muted-foreground">Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={mounted ? theme : undefined} onValueChange={setTheme}>
