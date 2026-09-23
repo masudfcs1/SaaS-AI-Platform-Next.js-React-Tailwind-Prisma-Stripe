@@ -15,6 +15,50 @@ npm run dev
 Use `npm run build` and `npm start` for production. Run `npm run lint`,
 `npm run typecheck`, and `npm test` to validate changes.
 
+## Appearance and chat
+
+The landing page and all workspace pages share shadcn/ui components and theme
+tokens in `app/globals.css`. Use the appearance menu in either header or Settings
+to select Light, Dark, or System. The default follows the device; explicit
+preferences persist in the browser through `next-themes`.
+
+The chat composer uses shadcn Card, Textarea, Select, and Button components. Chat
+and Code support follow-up messages, Markdown, copying, cancellation, retry, and
+regeneration. Images and speech audio use dedicated media composers with generation
+settings, previews, downloads, retry, and cancellation of waiting requests.
+
+## OpenAI images and speech
+
+Set `OPENAI_API_KEY` in the ignored `.env.local` file or your hosting environment.
+Never use a `NEXT_PUBLIC_` variable for this key. The lazy server-only client in
+`lib/openai.ts` allows builds without credentials. Optional model overrides are
+`OPENAI_IMAGE_MODEL` (default `gpt-image-2.5-flare`) and `OPENAI_AUDIO_MODEL`
+(default `gpt-4o-mini-tts`).
+
+- `/image` generates one PNG per request, with square, landscape, or portrait sizes
+  and low, medium, or high quality.
+- `/audio` turns the supplied text into spoken audio. Choose a voice, speed, MP3
+  or WAV, and optional delivery instructions. Every output is labeled AI-generated.
+  The old `/music` link redirects here; this feature does not compose music.
+
+The browser calls `/api/image` and `/api/audio`; credentials stay on the server.
+Results remain in the current browser session, so download files before clearing
+the session or refreshing. Requests are not automatically retried. Stopping a
+request stops waiting for its result and does not guarantee that provider-side
+work has stopped.
+
+API routes validate origins when provided, bound request sizes, sanitize provider
+errors, and impose 120-second image and 60-second audio deadlines. Per-process
+guards allow 2 concurrent images / 8 image starts per minute, and 4 concurrent
+audio requests / 20 audio starts per minute. These guards reset on restart and
+are not distributed quotas or billing caps. Production spending limits should
+also be configured in the OpenAI project.
+
+Video generation remains disabled because the OpenAI Sora API is scheduled to
+shut down on September 24, 2026; see the
+[official deprecation notice](https://developers.openai.com/api/docs/deprecations).
+The video page explains the service status without sending generation requests.
+
 ## Reusable Gemini utility
 
 Conversation and code generation share the server-only utility in `lib/gemini.ts`.

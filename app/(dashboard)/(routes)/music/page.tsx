@@ -1,5 +1,5 @@
-import { ChatWorkspace } from "@/components/chat/chat-workspace";
+import { redirect } from "next/navigation";
 
 export default function MusicPage() {
-  return <ChatWorkspace key="music" mode="music" />;
+  redirect("/audio");
 }

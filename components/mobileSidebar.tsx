@@ -15,7 +15,7 @@ const MobileSidebar = () => {
           <Menu aria-hidden="true" className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-72 max-w-[calc(100vw-2rem)] border-slate-200 p-0 dark:border-white/10" aria-describedby={undefined}>
+      <SheetContent side="left" className="w-72 max-w-[calc(100vw-2rem)] border-border p-0" aria-describedby={undefined}>
         <SheetTitle className="sr-only">Navigation menu</SheetTitle>
         <Sidebar onNavigate={() => setOpen(false)} />
       </SheetContent>

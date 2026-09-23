@@ -1,82 +1,77 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUp, Check, Code2, Sparkles } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-const phrases = [
-  "Chatbot.",
-  "Photo Generation.",
-  "Code Generation.",
-  "Music Generation.",
-  "Video Generation.",
-];
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export const LandingHero = () => {
-  const [index, setIndex] = useState(0);
-  const [subIndex, setSubIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const isPhraseComplete = subIndex === phrases[index].length + 1 && !isDeleting;
-    const isPhraseDeleted = subIndex === 0 && isDeleting;
-    const delay = isPhraseComplete ? 1500 : isPhraseDeleted ? 0 : isDeleting ? 40 : 80;
-
-    const timeout = setTimeout(() => {
-      if (isPhraseComplete) {
-        setIsDeleting(true);
-        return;
-      }
-
-      if (isPhraseDeleted) {
-        setIsDeleting(false);
-        setIndex((prev) => (prev + 1) % phrases.length);
-        return;
-      }
-
-      setSubIndex((prev) => prev + (isDeleting ? -1 : 1));
-    }, delay);
-
-    return () => clearTimeout(timeout);
-  }, [subIndex, index, isDeleting]);
-
   return (
-    <div className="text-white font-bold py-24 sm:py-32 text-center space-y-6">
-      <div className="inline-flex items-center gap-x-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs sm:text-sm text-zinc-300 font-medium mb-4 backdrop-blur-sm">
-        <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
-        <span>Next Generation AI Suite</span>
-      </div>
-
-      <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl space-y-4 font-extrabold tracking-tight">
-        <h1>The Best AI Tool for</h1>
-        <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-500 min-h-[1.2em]">
-          {phrases[index].substring(0, subIndex)}
-          <span className="inline-block w-1 h-10 md:h-14 bg-pink-500 ml-1 translate-y-2 animate-pulse" />
+    <section aria-labelledby="hero-heading" className="relative isolate overflow-hidden">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-20 -z-10 h-96 w-96 rounded-full bg-primary/[0.07] blur-3xl" />
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-20 pt-14 sm:px-8 sm:pb-24 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:px-10 lg:py-28">
+        <div className="max-w-xl">
+          <Badge variant="outline" className="gap-1.5 rounded-full border-primary/20 bg-primary/5 px-3 py-1.5 font-medium text-primary">
+            <Sparkles aria-hidden="true" className="h-3.5 w-3.5" /> Your AI workspace
+          </Badge>
+          <h1 id="hero-heading" className="mt-6 text-4xl font-semibold leading-[1.12] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
+            Think it through.<br />
+            <span className="text-primary">Make it happen.</span>
+          </h1>
+          <p className="mt-6 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
+            Chat through ideas, write useful code, create images, and turn scripts into spoken audio. Bring your next project to Dune.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button asChild size="lg" className="gap-2 rounded-xl px-6">
+              <Link href="/dashboard">Open workspace <ArrowRight aria-hidden="true" className="h-4 w-4" /></Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="rounded-xl px-6">
+              <Link href="#tools">Explore the tools</Link>
+            </Button>
+          </div>
+          <div className="mt-5 flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
+            <Check aria-hidden="true" className="h-3.5 w-3.5 text-primary" /> No account or sign-in needed.
+          </div>
         </div>
-      </div>
 
-      <div className="text-sm md:text-xl font-light text-zinc-400 max-w-xl mx-auto px-4">
-        Create intelligent content, generate realistic media, and write code using state-of-the-art AI models 10x faster.
+        <figure className="relative mx-auto w-full max-w-xl lg:mx-0">
+          <Card className="overflow-hidden rounded-2xl border-border shadow-xl shadow-primary/[0.04]">
+            <CardHeader className="flex-row items-center justify-between space-y-0 border-b border-border bg-muted/40 px-5 py-4">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground"><Sparkles aria-hidden="true" className="h-4 w-4" /></span>
+                <span className="text-sm font-semibold">Dune AI</span>
+              </div>
+              <Badge variant="outline" className="bg-background text-[10px] font-normal text-muted-foreground">Example conversation</Badge>
+            </CardHeader>
+            <CardContent className="space-y-6 p-5 sm:p-6">
+              <div className="flex justify-end">
+                <p className="max-w-[88%] rounded-2xl rounded-tr-md bg-muted px-4 py-3 text-sm leading-6">Help me plan a simple portfolio website.</p>
+              </div>
+              <div>
+                <div className="mb-3 flex items-center gap-2 text-xs font-semibold"><Sparkles aria-hidden="true" className="h-3.5 w-3.5 text-primary" /> Dune AI</div>
+                <p className="text-sm leading-6 text-muted-foreground">Start with a few things that tell your story well:</p>
+                <ol className="mt-4 space-y-3">
+                  {[
+                    ["A clear introduction", "Who you are and what you love making."],
+                    ["Your best work", "Three projects, with the story behind each one."],
+                    ["An easy next step", "A simple way for people to get in touch."],
+                  ].map(([title, detail], index) => (
+                    <li key={title} className="flex gap-3">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">{index + 1}</span>
+                      <div className="text-sm leading-6"><span className="font-medium">{title}</span><p className="text-xs leading-5 text-muted-foreground">{detail}</p></div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <div aria-hidden="true" className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background px-3.5 py-3 text-xs text-muted-foreground">
+                <span>Ask a follow-up question...</span>
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground"><ArrowUp className="h-3.5 w-3.5" /></span>
+              </div>
+            </CardContent>
+          </Card>
+          <figcaption className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground"><Code2 aria-hidden="true" className="h-3.5 w-3.5" /> One workspace. Room to think, build, and create.</figcaption>
+        </figure>
       </div>
-
-      <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Button
-          asChild
-          variant="premium"
-          className="md:text-lg p-4 md:p-6 rounded-full font-semibold group flex items-center gap-2"
-        >
-          <Link href="/dashboard">
-            <span>Go to Dashboard</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
-          </Link>
-        </Button>
-      </div>
-
-      <div className="text-zinc-500 text-xs md:text-sm font-normal">
-        No sign-in required. Explore the dashboard for free.
-      </div>
-    </div>
+    </section>
   );
 };

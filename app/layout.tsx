@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Dune AI - SaaS AI Platform",
-  description: "All-in-one AI Platform for conversation, image, video, music, and code generation.",
+  description: "A public AI workspace for conversation, code assistance, image generation, and speech audio.",
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >

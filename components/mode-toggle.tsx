@@ -1,46 +1,67 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import { ChevronDown, Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const subscribe = () => () => {};
+const themeOptions = [
+  { value: "light", label: "Light", icon: Sun },
+  { value: "dark", label: "Dark", icon: Moon },
+  { value: "system", label: "System", icon: Monitor },
+];
 
-export function ModeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
+export function ModeToggle({ showLabel = false }: { showLabel?: boolean }) {
+  const { theme, setTheme } = useTheme();
   const mounted = React.useSyncExternalStore(subscribe, () => true, () => false);
-
-  if (!mounted) {
-    return (
-      <Button
-        variant="outline"
-        size="icon"
-        className="rounded-full w-9 h-9 border-zinc-200 dark:border-white/15 bg-transparent"
-        aria-label="Toggle theme"
-      >
-        <span className="w-4 h-4" />
-      </Button>
-    );
-  }
-
-  const isDark = resolvedTheme === "dark";
+  const selected = themeOptions.find((option) => option.value === theme);
 
   return (
-    <Button
-      variant="outline"
-      size="icon"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="rounded-full w-9 h-9 border-zinc-200 dark:border-white/15 bg-transparent hover:bg-zinc-100 dark:hover:bg-white/10 transition-colors"
-      title={`Switch to ${isDark ? "light" : "dark"} mode`}
-      aria-label="Toggle theme"
-    >
-      {isDark ? (
-        <Sun className="h-4 w-4 text-amber-400 transition-all rotate-0 scale-100" />
-      ) : (
-        <Moon className="h-4 w-4 text-zinc-700 dark:text-zinc-300 transition-all rotate-0 scale-100" />
-      )}
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          size={showLabel ? "default" : "icon"}
+          className={showLabel ? "rounded-xl" : "h-9 w-9 rounded-xl"}
+          aria-label="Choose theme"
+          title="Choose appearance"
+        >
+          <span className="relative flex h-4 w-4 items-center justify-center" aria-hidden="true">
+            <Sun className="absolute h-4 w-4 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0 motion-reduce:transition-none" />
+            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100 motion-reduce:transition-none" />
+          </span>
+          {showLabel && (
+            <>
+              <span className="min-w-[3rem] text-left">{mounted ? selected?.label ?? "System" : "Theme"}</span>
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+            </>
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" sideOffset={8} className="w-44 rounded-xl p-1.5">
+        <DropdownMenuLabel className="text-xs text-muted-foreground">Appearance</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuRadioGroup value={mounted ? theme : undefined} onValueChange={setTheme}>
+          {themeOptions.map(({ value, label, icon: Icon }) => (
+            <DropdownMenuRadioItem key={value} value={value} className="gap-2.5 rounded-lg py-2.5">
+              <Icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              {label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

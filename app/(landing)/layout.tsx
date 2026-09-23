@@ -1,10 +1,10 @@
-import React from "react";
+import type { ReactNode } from "react";
 
-const LandingLayout = ({ children }: { children: React.ReactNode }) => {
+const LandingLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="h-full bg-[#111827] overflow-auto">
-      <div className="mx-auto max-w-screen-xl h-full w-full">{children}</div>
-    </main>
+    <div className="min-h-screen bg-background text-foreground">
+      {children}
+    </div>
   );
 };
 

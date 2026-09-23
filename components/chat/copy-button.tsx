@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Check, Copy, AlertCircle, LoaderCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface CopyButtonProps {
   text: string;
@@ -44,19 +45,21 @@ export function CopyButton({ text, label = "Copy", className }: CopyButtonProps)
   const Icon = status === "copied" ? Check : status === "error" ? AlertCircle : status === "copying" ? LoaderCircle : Copy;
 
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="sm"
       onClick={copy}
       disabled={status === "copying"}
       aria-label={currentLabel}
       title={status === "error" ? "Unable to copy. Select the text to copy it manually, or try again." : currentLabel}
       className={cn(
-        "inline-flex min-h-[32px] items-center justify-center gap-1.5 rounded-lg px-2 py-1 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 disabled:cursor-wait disabled:opacity-60 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100",
+        "h-8 gap-1.5 rounded-lg px-2 text-xs text-muted-foreground disabled:cursor-wait disabled:opacity-60",
         className,
       )}
     >
       <Icon className={cn("h-3.5 w-3.5 shrink-0", status === "copying" && "animate-spin")} aria-hidden="true" />
       <span aria-live="polite" aria-atomic="true">{currentLabel}</span>
-    </button>
+    </Button>
   );
 }

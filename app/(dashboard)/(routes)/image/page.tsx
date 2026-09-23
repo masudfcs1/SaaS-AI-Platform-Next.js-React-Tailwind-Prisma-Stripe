@@ -1,5 +1,5 @@
-import { ChatWorkspace } from "@/components/chat/chat-workspace";
+import { MediaWorkspace } from "@/components/media/media-workspace";
 
 export default function ImagePage() {
-  return <ChatWorkspace key="image" mode="image" />;
+  return <MediaWorkspace key="image" mode="image" />;
 }

@@ -7,13 +7,28 @@ const { JSDOM } = require("jsdom");
 const ts = require("typescript");
 
 // Install a DOM before loading React DOM so its event support detection is real.
-const dom = new JSDOM("<!doctype html><html><body></body></html>", { url: "http://localhost" });
+const dom = new JSDOM("<!doctype html><html><body></body></html>", { url: "http://localhost", pretendToBeVisual: true });
 global.window = dom.window;
 global.document = dom.window.document;
-global.HTMLElement = dom.window.HTMLElement;
+for (const name of ["HTMLElement", "HTMLInputElement", "HTMLFormElement", "HTMLSelectElement", "Element", "Node", "DocumentFragment", "MutationObserver", "CustomEvent", "Event"]) {
+  global[name] = dom.window[name];
+}
+global.getComputedStyle = dom.window.getComputedStyle.bind(dom.window);
+global.requestAnimationFrame = dom.window.requestAnimationFrame.bind(dom.window);
+global.cancelAnimationFrame = dom.window.cancelAnimationFrame.bind(dom.window);
+// jsdom has no layout or pointer capture; keep real Radix focus/portal behavior.
+global.ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 global.IS_REACT_ACT_ENVIRONMENT = true;
 Object.defineProperty(global, "navigator", { configurable: true, value: dom.window.navigator });
 dom.window.HTMLElement.prototype.scrollTo = function ({ top }) { this.scrollTop = top; };
+dom.window.HTMLElement.prototype.scrollIntoView = function () {};
+dom.window.HTMLElement.prototype.hasPointerCapture = () => false;
+dom.window.HTMLElement.prototype.setPointerCapture = function () {};
+dom.window.HTMLElement.prototype.releasePointerCapture = function () {};
 after(() => dom.window.close());
 
 const React = require("react");
@@ -237,35 +252,30 @@ test("New chat aborts the old request, clears history, focuses the composer, and
   assert.match(view.articles()[1].textContent, /A fresh answer/);
 });
 
-test("suggestions populate the composer and changing tools requests navigation", async (t) => {
+test("suggestions populate the composer and the real Radix tool picker supports keyboard navigation", async (t) => {
   const view = await workspace(t);
   await view.click("Make a plan");
   assert.match(view.input().value, /realistic weekly plan/);
   assert.equal(document.activeElement, view.input());
   assert.equal(view.requests.length, 0);
   await act(async () => {
-    const select = view.container.querySelector('select[aria-label="Choose AI tool"]');
-    select.value = "code";
-    select.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+    const trigger = view.container.querySelector('[role="combobox"][aria-label="Choose AI tool"]');
+    trigger.focus();
+    trigger.dispatchEvent(new dom.window.KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true, cancelable: true }));
+  });
+  const menu = document.querySelector('[role="listbox"]');
+  assert.ok(menu, "Radix opens the options in a portal");
+  assert.equal(view.container.contains(menu), false);
+  const options = [...menu.querySelectorAll('[role="option"]')];
+  assert.equal(options.length, 5);
+  const codeOption = options.find((option) => option.textContent === "Code");
+  assert.ok(codeOption);
+  await act(async () => {
+    codeOption.focus();
+    codeOption.dispatchEvent(new dom.window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }));
   });
   assert.deepEqual(navigations, ["/code"]);
-});
-
-test("unavailable media tools cannot generate through a click, Enter, or form submission", async (t) => {
-  for (const mode of ["image", "music", "video"]) {
-    await t.test(mode, async (child) => {
-      const view = await workspace(child, { mode });
-      assert.match(view.container.textContent, /Coming soon/);
-      await view.type("A creative idea");
-      assert.equal(view.button("Send message").disabled, true);
-      await view.click("Send message");
-      await view.key();
-      await view.submit();
-      assert.equal(view.requests.length, 0);
-      assert.equal(view.articles().length, 0);
-      assert.ok(view.container.querySelector('a[href="/conversation"]'));
-    });
-  }
+  assert.equal(document.querySelector('[role="listbox"]'), null);
 });
 
 test("Code renders formatted Markdown safely and copies the exact code or complete response", async (t) => {

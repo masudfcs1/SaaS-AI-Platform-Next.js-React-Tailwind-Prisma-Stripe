@@ -1,186 +1,119 @@
-"use client";
+import Link from "next/link";
+import { ArrowRight, Check, CornerDownRight, Layers3, MessageSquareText, Sparkles } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  MessageSquare,
-  ImageIcon,
-  VideoIcon,
-  Music,
-  Code,
-  Star,
-  Zap,
-  Shield,
-  Clock,
-} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { chatModes, chatTools } from "@/lib/chat-tools";
 
-const tools = [
-  {
-    label: "Conversation",
-    icon: MessageSquare,
-    color: "text-violet-400",
-    bgColor: "bg-violet-500/10",
-    description: "Chat with the smartest AI assistant to solve complex problems and answer questions.",
-  },
-  {
-    label: "Image Generation",
-    icon: ImageIcon,
-    color: "text-pink-400",
-    bgColor: "bg-pink-500/10",
-    description: "Turn your imagination into high-resolution visuals and art in seconds.",
-  },
-  {
-    label: "Video Generation",
-    icon: VideoIcon,
-    color: "text-orange-400",
-    bgColor: "bg-orange-500/10",
-    description: "Generate captivating video clips and animations from simple text prompts.",
-  },
-  {
-    label: "Music Generation",
-    icon: Music,
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/10",
-    description: "Compose custom background tracks, beats, and melodies on the fly.",
-  },
-  {
-    label: "Code Generation",
-    icon: Code,
-    color: "text-green-400",
-    bgColor: "bg-green-500/10",
-    description: "Generate clean, production-ready code in multiple languages instantly.",
-  },
-  {
-    label: "Supercharged Speed",
-    icon: Zap,
-    color: "text-amber-400",
-    bgColor: "bg-amber-500/10",
-    description: "Low-latency responses powered by cutting-edge cloud infrastructure.",
-  },
-];
-
-const testimonials = [
-  {
-    name: "Alex Rivera",
-    avatar: "AR",
-    title: "Senior Software Engineer",
-    description: "This is hands down the best all-in-one AI platform. The code generation tool saved me hours every week.",
-  },
-  {
-    name: "Sarah Chen",
-    avatar: "SC",
-    title: "Creative Director",
-    description: "The image and video generation features are mind-blowing. The fidelity and quality are unmatched.",
-  },
-  {
-    name: "David Kim",
-    avatar: "DK",
-    title: "Startup Founder",
-    description: "Dune AI replaced 4 different AI subscriptions for my team. Simple, fast, and remarkably affordable.",
-  },
-  {
-    name: "Elena Rostova",
-    avatar: "ER",
-    title: "Content Strategist",
-    description: "I use the conversation tool every single day for ideation and drafting. Essential tool for modern workflows.",
-  },
+const workflows = [
+  { title: "Start with a thought", description: "Ask a question, describe an image, or paste a script to turn into speech. Bring the words; choose the tool.", icon: MessageSquareText },
+  { title: "Keep the conversation going", description: "Use Chat and Code to ask follow-up questions and refine the answer. Each conversation keeps the context as you work.", icon: Layers3 },
+  { title: "Take the next step", description: "Copy text and code, or download an image or audio clip for your own project.", icon: CornerDownRight },
 ];
 
 export const LandingContent = () => {
+  const availableTools = chatModes.filter((mode) => chatTools[mode].available);
+  const unavailableTools = chatModes.filter((mode) => !chatTools[mode].available);
+
   return (
-    <div className="px-6 sm:px-10 pb-20 max-w-7xl mx-auto space-y-28">
-      {/* Tools Section */}
-      <div className="space-y-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            Explore Powerful AI Tools
-          </h2>
-          <p className="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto">
-            Everything you need to create, brainstorm, and build with intelligence.
-          </p>
-        </div>
+    <>
+      <section id="tools" aria-labelledby="tools-heading" className="scroll-mt-24 border-y border-border bg-muted/30 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <div className="mb-8 max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Made for your everyday ideas</p>
+            <h2 id="tools-heading" className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">A little help. A lot of possibilities.</h2>
+            <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">Find the right tool for chat, code, images, or spoken audio. Each has its own focused workspace.</p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool) => (
-            <Card
-              key={tool.label}
-              className="bg-white/[0.04] border-white/10 text-white hover:bg-white/[0.07] hover:border-white/20 transition duration-300 backdrop-blur-sm"
-            >
-              <CardHeader className="flex flex-row items-center gap-x-4 pb-2">
-                <div className={`p-3 w-fit rounded-xl ${tool.bgColor}`}>
-                  <tool.icon className={`w-6 h-6 ${tool.color}`} />
+          <div className="grid gap-4 md:grid-cols-2 lg:gap-6">
+            {availableTools.map((mode) => {
+              const tool = chatTools[mode];
+              const Icon = tool.icon;
+              return (
+                <Card key={mode} className="flex flex-col rounded-2xl border-border shadow-sm">
+                  <CardHeader className="pb-3 sm:p-7 sm:pb-3">
+                    <div className="mb-5 flex items-center justify-between gap-4">
+                      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon aria-hidden="true" className="h-5 w-5" strokeWidth={1.8} /></span>
+                      <Badge variant="secondary" className="gap-1 rounded-full font-medium"><Check aria-hidden="true" className="h-3 w-3" /> Available now</Badge>
+                    </div>
+                    <CardTitle className="text-xl">{tool.label}</CardTitle>
+                    <CardDescription className="pt-1 leading-6">{tool.description}</CardDescription>
+                  </CardHeader>
+                  <CardFooter className="mt-auto pt-3 sm:px-7 sm:pb-7">
+                    <Button asChild variant="outline" className="gap-2 rounded-lg">
+                      <Link href={tool.href}>Open {tool.shortLabel} <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" /></Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              );
+            })}
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:gap-6">
+            {unavailableTools.map((mode) => {
+              const tool = chatTools[mode];
+              const Icon = tool.icon;
+              return (
+                <Card key={mode} className="flex flex-col rounded-2xl border-dashed border-border bg-card/70 shadow-none sm:flex-row sm:items-center">
+                  <CardHeader className="flex-1 pb-3 sm:pb-6">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Icon aria-hidden="true" className="h-5 w-5 text-muted-foreground" strokeWidth={1.8} />
+                      <CardTitle className="text-base">{tool.label}</CardTitle>
+                      <Badge variant="outline" className="rounded-full text-[10px] font-normal text-muted-foreground">Currently unavailable</Badge>
+                    </div>
+                    <CardDescription className="pt-1 text-xs leading-6">{tool.description}</CardDescription>
+                  </CardHeader>
+                  <CardFooter className="shrink-0 sm:pt-6">
+                    <Button asChild variant="link" size="sm" className="h-auto gap-1.5 px-0 py-0 text-xs">
+                      <Link href={tool.href}>View studio <ArrowRight aria-hidden="true" className="h-3 w-3" /></Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works" aria-labelledby="workflow-heading" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-24 lg:px-10">
+        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.5fr] lg:gap-16">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">From thought to next step</p>
+            <h2 id="workflow-heading" className="mt-3 max-w-sm text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Keep your focus.<br />Find your flow.</h2>
+            <p className="mt-4 max-w-md text-sm leading-7 text-muted-foreground">A calm workspace that makes room for the conversation, with your next prompt always close by.</p>
+            <Button asChild variant="link" className="mt-3 gap-2 px-0">
+              <Link href="/conversation">Start a conversation <ArrowRight aria-hidden="true" className="h-4 w-4" /></Link>
+            </Button>
+          </div>
+          <div className="grid gap-4">
+            {workflows.map((workflow, index) => (
+              <div key={workflow.title} className="flex gap-4 rounded-2xl border border-border bg-card p-5 sm:gap-5 sm:p-6">
+                <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted text-primary"><workflow.icon aria-hidden="true" className="h-5 w-5" strokeWidth={1.8} /></div>
+                <div>
+                  <h3 className="text-sm font-semibold"><span className="mr-2 text-xs font-normal text-muted-foreground">0{index + 1}</span>{workflow.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{workflow.description}</p>
                 </div>
-                <CardTitle className="text-xl font-semibold">{tool.label}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-zinc-400 text-sm leading-relaxed">{tool.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Testimonials Section */}
-      <div className="space-y-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-            Loved by Thousands of Creators
-          </h2>
-          <p className="text-zinc-400 text-sm sm:text-base">
-            See what professionals are saying about Dune AI.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {testimonials.map((item) => (
-            <Card
-              key={item.name}
-              className="bg-[#192339] border-none text-white hover:scale-[1.02] transition duration-300"
-            >
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-x-1 mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <div className="flex items-center gap-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center font-bold text-sm text-white shadow-md">
-                    {item.avatar}
-                  </div>
-                  <div>
-                    <p className="text-base font-semibold leading-none">{item.name}</p>
-                    <p className="text-zinc-400 text-xs mt-1">{item.title}</p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-2">
-                <p className="text-zinc-300 text-sm leading-relaxed italic">
-                  &ldquo;{item.description}&rdquo;
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom CTA Banner */}
-      <div className="rounded-3xl bg-gradient-to-r from-purple-900/40 via-indigo-900/40 to-pink-900/40 border border-white/10 p-8 sm:p-12 text-center space-y-4 backdrop-blur-md">
-        <h3 className="text-2xl sm:text-4xl font-extrabold text-white">
-          Ready to supercharge your creativity?
-        </h3>
-        <p className="text-zinc-300 text-sm sm:text-base max-w-xl mx-auto">
-          Join thousands of developers, designers, and creators who use Dune AI daily.
-        </p>
-      </div>
-
-      {/* Footer */}
-      <footer className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-        <p>© {new Date().getFullYear()} Dune AI. All rights reserved.</p>
-        <div className="flex items-center gap-6">
-          <span className="hover:text-zinc-400 cursor-pointer transition">Privacy Policy</span>
-          <span className="hover:text-zinc-400 cursor-pointer transition">Terms of Service</span>
-          <span className="hover:text-zinc-400 cursor-pointer transition">Support</span>
-        </div>
-      </footer>
-    </div>
+      <section aria-labelledby="start-heading" className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 sm:pb-24 lg:px-10">
+        <Card className="overflow-hidden rounded-3xl border-primary/15 bg-accent/60 shadow-none">
+          <CardContent className="flex flex-col items-start justify-between gap-8 p-7 sm:p-10 md:flex-row md:items-center lg:p-12">
+            <div className="max-w-xl">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground"><Sparkles aria-hidden="true" className="h-5 w-5" /></div>
+              <h2 id="start-heading" className="text-2xl font-semibold tracking-tight sm:text-3xl">Your next idea starts here.</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">Open the workspace and see where a conversation takes you.</p>
+            </div>
+            <Button asChild size="lg" className="shrink-0 gap-2 rounded-xl">
+              <Link href="/dashboard">Let&apos;s get started <ArrowRight aria-hidden="true" className="h-4 w-4" /></Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+    </>
   );
 };
