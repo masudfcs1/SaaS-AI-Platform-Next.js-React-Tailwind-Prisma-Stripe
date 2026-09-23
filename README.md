@@ -1,11 +1,51 @@
 
 
-First, run the development server:
+Configure the environment using `.env.example`, then run the development server:
 
 ```bash
 npm run dev
 
 ```
+
+## Reusable Gemini utility
+
+Conversation and code generation share the server-only utility in `lib/gemini.ts`.
+Configure credentials in your ignored `.env` or `.env.local` file:
+
+```dotenv
+GEMINI_API_KEY=your_key
+# Or configure multiple keys (blank entries and duplicates are removed):
+GEMINI_API_KEYS=your_first_key,your_second_key
+# Optional model priority override:
+GEMINI_MODELS=gemini-3.6-flash,gemini-3.5-flash,gemini-3.5-flash-lite,gemini-flash-latest
+```
+
+Use the helpers from API routes, server actions, or server components:
+
+```ts
+import { generateGeminiText, generateGeminiResponse } from "@/lib/gemini";
+
+const text = await generateGeminiText("Explain closures in JavaScript.");
+
+const message = await generateGeminiResponse({
+  messages: [{ role: "user", content: "Write a React toggle button." }],
+  systemInstruction: "Answer with code and code comments only.",
+  maxOutputTokens: 2048,
+});
+// message: { role: "assistant", content: string }
+```
+
+The utility exports `GEMINI_API_KEYS`, `GEMINI_MODELS`, `GeminiMessage`,
+`GeminiOptions`, and `GeminiError`. Keys rotate between requests. Each model/key
+pair is attempted at most once for credential, quota, or availability failures;
+invalid keys are skipped for the rest of the request. Retries share a 45-second
+budget (`timeoutMs` overrides it), with at most 15 seconds per attempt. Pass an
+`AbortSignal` as `signal` to cancel a request. Prompt rejections are not retried.
+
+Keep these imports on the server. Client components should call `/api/conversation`
+or `/api/code`; do not store API credentials in `NEXT_PUBLIC_` variables. See
+[Google's Gemini API reference](https://ai.google.dev/api/generate-content) for the
+underlying request format. Run `npm test` for the utility and route regression tests.
 
 ![12](https://github.com/masudfcs1/SaaS-AI-Platform-Next.js-React-Tailwind-Prisma-Stripe/assets/57311382/7b244702-7ad7-4d6f-abc5-1cf61ce02a25)
 ![21](https://github.com/masudfcs1/SaaS-AI-Platform-Next.js-React-Tailwind-Prisma-Stripe/assets/57311382/e3868567-0d8d-40e1-9f8c-fbc976f68666)

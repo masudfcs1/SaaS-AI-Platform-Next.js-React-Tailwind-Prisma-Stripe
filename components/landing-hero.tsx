@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useAuth } from "@clerk/nextjs";
 import { Sparkles, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,6 @@ const phrases = [
 ];
 
 export const LandingHero = () => {
-  const { isSignedIn, isLoaded } = useAuth();
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -60,41 +58,20 @@ export const LandingHero = () => {
       </div>
 
       <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-        {isLoaded && isSignedIn ? (
+        <Button
+          asChild
+          variant="premium"
+          className="md:text-lg p-4 md:p-6 rounded-full font-semibold group flex items-center gap-2"
+        >
           <Link href="/dashboard">
-            <Button
-              variant="premium"
-              className="md:text-lg p-4 md:p-6 rounded-full font-semibold group flex items-center gap-2"
-            >
-              <span>Go to Dashboard</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
-            </Button>
+            <span>Go to Dashboard</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
           </Link>
-        ) : (
-          <>
-            <Link href="/sign-up">
-              <Button
-                variant="premium"
-                className="md:text-lg p-4 md:p-6 rounded-full font-semibold group flex items-center gap-2"
-              >
-                <span>Start Generating For Free</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
-              </Button>
-            </Link>
-            <Link href="/sign-in">
-              <Button
-                variant="outline"
-                className="md:text-lg p-4 md:p-6 rounded-full font-semibold bg-white/10 text-white border-white/20 hover:bg-white/20 hover:text-white"
-              >
-                Sign In
-              </Button>
-            </Link>
-          </>
-        )}
+        </Button>
       </div>
 
       <div className="text-zinc-500 text-xs md:text-sm font-normal">
-        No credit card required • Free trial included
+        No sign-in required. Explore the dashboard for free.
       </div>
     </div>
   );

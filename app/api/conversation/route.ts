@@ -1,28 +1,22 @@
 import { NextResponse } from "next/server";
-import { openai } from "@/lib/openai";
+import { GeminiError, generateGeminiResponse } from "@/lib/gemini";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { messages } = body;
-
-    // Authentication is optional: allow unauthenticated dashboard access
-    if (!openai.apiKey) {
-      return new NextResponse("OpenAI API Key not configured", { status: 500 });
-    }
-
-    if (!messages) {
-      return new NextResponse("Messages are required", { status: 400 });
-    }
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages,
+    const response = await generateGeminiResponse({
+      messages: body?.messages,
+      signal: req.signal,
     });
 
-    return NextResponse.json(response.choices[0].message);
+    return NextResponse.json(response);
   } catch (error) {
-    console.log("[CONVERSATION_ERROR]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    if (error instanceof SyntaxError) {
+      return new NextResponse("Invalid JSON body", { status: 400 });
+    }
+    if (error instanceof GeminiError) {
+      return new NextResponse(error.message, { status: error.status });
+    }
+    return new NextResponse("Unable to generate a response. Please try again.", { status: 500 });
   }
 }
