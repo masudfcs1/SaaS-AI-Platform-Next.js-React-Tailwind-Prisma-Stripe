@@ -41,7 +41,7 @@ GEMINI_API_KEY=your_gemini_api_key
 
 ## 3. How to Run with Docker
 
-### Option A: Using Docker Compose (Recommended)
+### Option A: Using Docker Compose (Production Build)
 
 Docker Compose automatically configures port mapping and loads your `.env.local` / `.env` environment variables.
 
@@ -68,7 +68,24 @@ Docker Compose automatically configures port mapping and loads your `.env.local`
 
 ---
 
-### Option B: Using Docker CLI Directly
+### Option B: Development Mode with Live Hot Reloading (Instant Code Updates)
+
+When editing code locally (e.g. in `app/`), use this mode so changes update instantly without rebuilding:
+
+1. **Start dev container:**
+   ```bash
+   docker compose -f docker-compose.dev.yml up --build
+   ```
+
+2. **Stop dev container:**
+   Press `Ctrl+C` or in another terminal:
+   ```bash
+   docker compose -f docker-compose.dev.yml down
+   ```
+
+---
+
+### Option C: Using Docker CLI Directly
 
 If you prefer building and running with Docker commands:
 
