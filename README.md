@@ -79,11 +79,31 @@ Keep credentials in the ignored `.env.local` file or your hosting environment. T
 
 ### 3. Start the app
 
+Choose how you want to run the application:
+
+#### Option A: Local Node.js (Development)
+
 ```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). Restart the development server after changing environment variables.
+
+#### Option B: Docker (Containerized)
+
+Make sure [Docker Desktop](https://www.docker.com/products/docker-desktop/) is running, then run:
+
+```bash
+# Start with Docker Compose (recommended)
+docker compose up --build -d
+```
+
+Open [http://localhost:3000](http://localhost:3000). The container automatically picks up environment variables from `.env.local` or `.env`.
+
+To stop the container:
+```bash
+docker compose down
+```
 
 ## Environment variables
 
@@ -236,7 +256,93 @@ Media routes validate input and origins when provided, limit JSON request bodies
 | Images | 120 seconds | 2 | 8 |
 | Audio | 60 seconds | 4 | 20 |
 
-These guards reset when the process restarts and apply separately to each running instance. They are not per-user quotas or billing caps. The app is public; configure provider spending limits and use a shared rate limiter when deploying across multiple instances.
+## Docker deployment
+
+The project includes an optimized multi-stage [Dockerfile](Dockerfile) utilizing Alpine Linux and Next.js standalone output tracing. This creates a lightweight, production-ready container image (~150MB) run by an unprivileged system user (`nextjs`) for high security and performance.
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows / macOS) or Docker Engine + Docker Compose (Linux).
+- Ensure Docker daemon is running (`docker --version`).
+
+### Method 1: Using Docker Compose (Recommended)
+
+Docker Compose manages building, running, and wiring up environment variables automatically.
+
+1. **Configure Environment Variables**:
+   Ensure you have configured `.env.local` (or `.env`):
+   ```bash
+   cp .env.example .env.local
+   ```
+   Add your `OPENAI_API_KEY` and `GEMINI_API_KEY`.
+
+2. **Build and Start Container**:
+   ```bash
+   docker compose up --build -d
+   ```
+   - `--build`: Builds the image with current changes.
+   - `-d`: Runs the container in detached mode (background).
+
+3. **Access the Application**:
+   Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
+
+4. **View Container Logs**:
+   ```bash
+   docker compose logs -f
+   ```
+
+5. **Stop Container**:
+   ```bash
+   docker compose down
+   ```
+
+### Method 2: Using Docker CLI Directly
+
+If you prefer building and running containers manually without Compose:
+
+1. **Build the Docker Image**:
+   ```bash
+   docker build -t dune-ai .
+   ```
+
+2. **Run the Container**:
+   With your `.env.local` file:
+   ```bash
+   docker run -d -p 3000:3000 --name dune-ai --env-file .env.local dune-ai
+   ```
+
+   Or by passing environment variables inline:
+   ```bash
+   docker run -d -p 3000:3000 --name dune-ai \
+     -e OPENAI_API_KEY="your_openai_api_key" \
+     -e GEMINI_API_KEY="your_gemini_api_key" \
+     dune-ai
+   ```
+
+3. **Manage the Container**:
+   ```bash
+   # View live logs
+   docker logs -f dune-ai
+
+   # Stop the container
+   docker stop dune-ai
+
+   # Remove the container
+   docker rm dune-ai
+   ```
+
+### Customizing Ports
+
+To run on a different host port (e.g. `8080` instead of `3000`):
+- With Docker Compose:
+  ```bash
+  PORT=8080 docker compose up -d
+  ```
+  (or modify `ports: - "8080:3000"` in [docker-compose.yml](docker-compose.yml))
+- With Docker CLI:
+  ```bash
+  docker run -d -p 8080:3000 --env-file .env.local dune-ai
+  ```
 
 ## Troubleshooting
 
