@@ -2,13 +2,13 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
-import { DuneMark } from "@/components/dune-mark";
+import { DuneLogo } from "@/components/dune-logo";
 
 export const LandingNavbar = () => (
   <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/85">
     <div className="landing-container flex h-[76px] items-center justify-between gap-4 sm:h-[88px]">
       <Link href="/" aria-label="Dune AI home" className="flex shrink-0 items-center gap-2.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background">
-        <DuneMark className="h-8 w-8 text-primary sm:h-9 sm:w-9" /><span className="text-[28px] font-semibold leading-none tracking-[-.06em]">dune<span className="ml-1.5 align-top text-[10px] font-medium leading-5 tracking-normal text-muted-foreground">AI</span></span>
+        <DuneLogo />
       </Link>
       <nav aria-label="Main navigation" className="hidden items-center gap-8 text-[13px] text-muted-foreground md:flex lg:gap-10">
         <Link href="#workspace" className="landing-nav-link">The workspace</Link><Link href="#tools" className="landing-nav-link">Our tools</Link><Link href="#how-it-works" className="landing-nav-link">How it works</Link>

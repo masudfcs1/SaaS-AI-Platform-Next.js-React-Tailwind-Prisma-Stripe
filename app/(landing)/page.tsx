@@ -5,7 +5,7 @@ import { LandingNavbar } from "@/components/landing-navbar";
 import { LandingHero } from "@/components/landing-hero";
 import { LandingPreview } from "@/components/landing-preview";
 import { LandingContent } from "@/components/landing-content";
-import { DuneMark } from "@/components/dune-mark";
+import { DuneLogo } from "@/components/dune-logo";
 
 export const metadata: Metadata = {
   title: "Dune AI — A little intelligence. Endless possibility.",
@@ -22,7 +22,7 @@ export default function LandingPage() {
         <div className="landing-container py-10 sm:py-14">
           <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
             <div>
-              <Link href="/" aria-label="Dune AI home" className="inline-flex items-center gap-2.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><DuneMark className="h-7 w-7 text-primary" /><span className="text-2xl font-semibold tracking-[-.06em]">dune AI</span></Link>
+              <Link href="/" aria-label="Dune AI home" className="inline-flex rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><DuneLogo compact /></Link>
               <p className="mt-3 max-w-xs text-sm leading-6 text-muted-foreground">For the things you haven&apos;t made yet.</p>
             </div>
             <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted-foreground">

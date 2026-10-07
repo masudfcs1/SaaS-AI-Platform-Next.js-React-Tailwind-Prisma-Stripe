@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowDown, ArrowUp, ArrowUpRight, Check, CircleAlert, Loader2, RotateCcw, Sparkles, Square, SquarePen } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpRight, Check, CircleAlert, Loader2, RotateCcw, Square, SquarePen } from "lucide-react";
 import { chatModes, chatTools, type ChatMode } from "@/lib/chat-tools";
 import { cn } from "@/lib/utils";
 import { CopyButton } from "@/components/chat/copy-button";
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { DuneMark } from "@/components/dune-mark";
 
 interface ChatMessage {
   id: string;
@@ -190,7 +191,7 @@ export function ChatWorkspace({ mode, overview = false }: ChatWorkspaceProps) {
         {messages.length === 0 ? (
           <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col items-center justify-center py-8 text-center sm:py-10">
             <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/15 bg-primary/10 shadow-sm">
-              {overview || mode === "conversation" ? <Sparkles className="h-7 w-7 text-primary" aria-hidden="true" /> : <Icon className={cn("h-7 w-7", tool.accent)} aria-hidden="true" />}
+              {overview || mode === "conversation" ? <DuneMark className="h-9 w-9" /> : <Icon className={cn("h-7 w-7", tool.accent)} aria-hidden="true" />}
             </div>
             <h1 className="text-2xl font-semibold tracking-tight [text-wrap:balance] sm:text-3xl lg:text-4xl">
               {overview ? "What would you like to create?" : tool.title}
@@ -232,7 +233,7 @@ export function ChatWorkspace({ mode, overview = false }: ChatWorkspaceProps) {
             ) : (
               <article key={message.id} aria-label="Dune AI response" className="min-w-0">
                 <div className="mb-3 flex items-center gap-2.5">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10"><Sparkles className="h-4 w-4 text-primary" aria-hidden="true" /></div>
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted"><DuneMark className="h-6 w-6" /></div>
                   <span className="text-xs font-semibold">Dune AI</span>
                 </div>
                 <div className="min-w-0 sm:pl-[38px]"><MessageContent content={message.content} /></div>

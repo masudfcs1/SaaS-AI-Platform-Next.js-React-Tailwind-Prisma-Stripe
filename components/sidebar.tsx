@@ -6,11 +6,11 @@ import {
   ArrowUpLeft,
   LayoutGrid,
   Settings2,
-  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { chatModes, chatTools } from "@/lib/chat-tools";
+import { DuneLogo } from "@/components/dune-logo";
 
 const workspaceRoute = {
   label: "Workspace",
@@ -63,10 +63,7 @@ export const Sidebar = ({ onNavigate }: SidebarProps) => {
         className="flex h-20 shrink-0 items-center gap-3 px-6 pr-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
         aria-label="Dune AI workspace"
       >
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-          <Sparkles aria-hidden="true" className="h-5 w-5" strokeWidth={1.8} />
-        </span>
-        <span className="whitespace-nowrap text-lg font-semibold tracking-tight text-foreground">Dune AI<span className="text-primary">.</span></span>
+        <DuneLogo compact />
       </Link>
 
       <nav aria-label="Workspace navigation" className="min-h-0 flex-1 overflow-y-auto px-3 pb-6 pt-3">
